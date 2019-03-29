@@ -1,44 +1,39 @@
 #Barcode UPC Lookup using webscrape (c)2019 Rendy Zhang
 #Install procedure
 #sudo apt-get install software-properties-common
-#sudo python3 -m pip install tabulate
 #sudo apt-get install python3-bs4
-#sudo apt-get install python3-requests
 
-import requests
-from bs4 import BeautifulSoup
-import time
-from tabulate import tabulate
+
+from urllib.request import urlopen as req
+from bs4 import BeautifulSoup as soup
+import datetime
+url="https://www.upcdatabase.com/item/"
+
 
 while True:
-    #upc lookup url (upc database)
-    url="https://www.upcdatabase.com/item/"
-
     upc=input()
-
     global lookup_url
-    lookup_url=url+upc
-
-    response=requests.get(lookup_url)
-    html_doc=response.text
-    
+    lookup_url=url+upc    
     def scraper():
-        #First print the UPC number
-        #get the html response using requests
-        response=requests.get(lookup_url)
-        html_doc=response.text
+        response=req(lookup_url)
+        html_page=response.read()
+        response.close()
         #website soup'ed
-        soupypage=BeautifulSoup(html_doc,"html.parser")
-        prettysoupypage=soupypage.prettify()
+        soupypage=soup(html_page,"html.parser")
+        #making sure the UPC is valid and also exists in the database
+        check=soupypage.h2.text
+        if (check=="Item Not Found") or (check=="UPC Error"):
+            return
         #scrape based on tags
-        itemdescription=soupypage.find({"table"},attrs={"class":"data"})
-        if itemdescription != None:
-            itemdescription=itemdescription.text.strip()
-        else:
-            itemdescription="Not found!"
-    
-
-
-        print (itemdescription)
-
+        itemdescription=soupypage.find("table",{"class":"data"}).findAll("tr")[2].findAll("td")[2].text
+        sizeweight=soupypage.find("table",{"class":"data"}).findAll("tr")[3].findAll("td")[2].text
+        country=soupypage.find("table",{"class":"data"}).findAll("tr")[4].findAll("td")[2].text
+        print("UPC:" +upc)
+        print("The item is: " + itemdescription)
+        print("Size and weight of: " + sizeweight)
+        print("From country: " +country)
+        now = datetime.datetime.now()
+        print ("Current date and time : " + now.strftime("%Y-%m-%d %H:%M:%S"))
     scraper()
+
+
