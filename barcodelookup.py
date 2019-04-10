@@ -6,6 +6,7 @@
 import urllib
 from urllib.request import urlopen as req
 from bs4 import BeautifulSoup as soup
+from Naked.toolshed.shell import execute_js, muterun_js, run_js
 import datetime
 url="https://www.upcdatabase.com/item/"
 
@@ -42,6 +43,11 @@ while True:
         
         print("UPC:" +upc)
         print("The item is: " + itemdescription)
+        muterun_js('node/index.js', "'" + itemdescription + "'")
+        #if success:
+         #   print("success")
+        #else:
+        #    print("fail")
         now = datetime.datetime.now()
         print ("Current date and time : " + now.strftime("%Y-%m-%d %H:%M:%S"))
     scraper()
