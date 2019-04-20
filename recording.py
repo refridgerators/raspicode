@@ -161,7 +161,7 @@ def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
-    credential_path = "C:/Users/nickj/OneDrive/Documents/Capstone/voice.json"
+    credential_path = "/home/pi/raspicode/voice.json"
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
     client = speech.SpeechClient()
     config = types.RecognitionConfig(

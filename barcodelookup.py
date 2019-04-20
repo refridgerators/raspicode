@@ -43,7 +43,7 @@ while True:
         
         print("UPC:" +upc)
         print("The item is: " + itemdescription)
-        muterun_js('node/index.js', "'" + itemdescription + "'")
+        muterun_js('node/index.js', "'" + itemdescription.lower() + "'")
         #if success:
          #   print("success")
         #else:
